@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# Searches for a phrase in all the files in the current directory
+# (c) 2015 Roozbeh Farahbod
+#
+# Usage: search [-v] PHRASE
+
+if [ -z "$1" ]
+then
+	echo "Nothing to search."
+	echo "Usage: search [-v] PHRASE"
+else
+	if [ -z "$2" ]
+	then
+		KeyWord=$1
+	else
+		KeyWord=$2
+		if [ $1 == "-v" ]
+		then
+			Verbose=true
+		fi
+	fi
+
+ 	find . | while read i
+		do
+			grep -qd skip "$KeyWord" "$i"
+			if [ $? == 0 ]
+			then
+				if [ $Verbose ]
+				then
+					echo "$(tput setaf 5)*** FILE: $i $(tput sgr 0)"
+					grep --color -B2 -A2 "$KeyWord" "$i"
+				else
+					echo $i
+				fi
+			fi
+		done
+fi
