@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 #
+# Sorts media files into a <year>/<month> folder structure.
+# Made for MacOS.
 #
+# (c) 2016 Roozbeh Farahbod
+#
+# The MIT License (MIT)
 #
 
 # Run on MacOS only
@@ -17,7 +22,7 @@ dir="$1"
 # check if a directory is given
 if [ -z "$dir" ]
 then
-  echo "usage: sortMedia <year_folder>"
+  echo "usage: sortMedia <media_folder>"
   exit 1
 fi
 
@@ -28,7 +33,7 @@ then
   exit 1
 fi
 
-pushd "${dir}"
+pushd "${dir}" > /dev/null
 
 # Ensure date folder exists
 ensureDateFolder() {
@@ -51,4 +56,4 @@ do
   mv -i "$imgfile" "$folder"
 done
 
-popd
+popd > /dev/null
