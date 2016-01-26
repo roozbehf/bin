@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+#
+#
+#
+
+# Run on MacOS only
+unamestr=$(uname)
+if [ "$unamestr" != "Darwin" ]
+then
+  echo "This script is written for MacOS."
+  exit 1
+fi
+
+dir="$1"
+
+# check if a directory is given
+if [ -z "$dir" ]
+then
+  echo "usage: sortMedia <year_folder>"
+  exit 1
+fi
+
+# check if
+if [ ! -d "${dir}" ]
+then
+  echo "The directory '${dir}' does not exist. "
+  exit 1
+fi
+
+pushd "${dir}"
+
+# Ensure date folder exists
+ensureDateFolder() {
+  folder="$1"
+  if [ ! -d "${folder}" ]
+  then
+    mkdir -p "${folder}"
+    echo "Made missing folder ${folder}."
+  fi
+}
+
+for imgfile in *.*
+do
+  date=$(mdls $imgfile | grep kMDItemContentCreationDate | sed 's/^.*=\ \(20..\)-\(..\)-.*/\1 \2/g')
+  year=${date% *}
+  month=${date##* }
+  folder="${year}/${month}"
+  ensureDateFolder "$folder"
+  echo "${imgfile} -> ${folder}"
+  mv -i "$imgfile" "$folder"
+done
+
+popd
