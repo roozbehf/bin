@@ -26,7 +26,7 @@ then
   exit 1
 fi
 
-# check if
+# check if directory exists
 if [ ! -d "${dir}" ]
 then
   echo "The directory '${dir}' does not exist. "
@@ -45,6 +45,7 @@ ensureDateFolder() {
   fi
 }
 
+# Move the files
 for imgfile in *.*
 do
   date=$(mdls $imgfile | grep kMDItemContentCreationDate | sed 's/^.*=\ \(20..\)-\(..\)-.*/\1 \2/g')
