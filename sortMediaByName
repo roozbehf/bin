@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+#
+# Sorts media files into a <year>/<month> folder structure,
+# assuming that every file has a name pattern of the form:
+#    ....yyyymmdd.*
+#
+# Made for MacOS.
+#
+# (c) 2016 Roozbeh Farahbod
+#
+# The MIT License (MIT)
+#
+
+# Run on MacOS only
+unamestr=$(uname)
+if [ "$unamestr" != "Darwin" ]
+then
+  echo "This script is written for MacOS."
+  exit 1
+fi
+
+dir="$1"
+
+# check if a directory is given
+if [ -z "$dir" ]
+then
+  echo "usage: sortMedia <media_folder>"
+  exit 1
+fi
+
+# check if directory exists
+if [ ! -d "${dir}" ]
+then
+  echo "The directory '${dir}' does not exist. "
+  exit 1
+fi
+
+pushd "${dir}" > /dev/null
+
+# Ensure date folder exists
+ensureDateFolder() {
+  folder="$1"
+  if [ ! -d "${folder}" ]
+  then
+    mkdir -p "${folder}"
+    echo "Made missing folder ${folder}."
+  fi
+}
+
+# Move the files
+for imgfile in IMG_*
+do
+  date=${imgfile:4:12}
+  year=${date:0:4}
+  month=${date:4:2}
+  folder="${year}/${month}"
+  ensureDateFolder "$folder"
+  echo "${imgfile} -> ${folder}"
+  mv -i "$imgfile" "$folder"
+done
+
+popd > /dev/null
