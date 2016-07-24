@@ -8,12 +8,23 @@
 #
 # The MIT License (MIT)
 #
+# This script requires `exiftool` to read the EXIF information from the media
+# files. You can download it from http://www.sno.phy.queensu.ca/~phil/exiftool/
+#
 
 # Run on MacOS only
 unamestr=$(uname)
 if [ "$unamestr" != "Darwin" ]
 then
-  echo "This script is written for MacOS."
+  echo "Error: This script is written for MacOS."
+  exit 1
+fi
+
+which -s exiftool
+exiftoolExists=$?
+if [ $exiftoolExists -ne 0 ]
+then
+  echo "Error: This script requires 'exiftool'. You can download it from http://www.sno.phy.queensu.ca/~phil/exiftool/"
   exit 1
 fi
 
@@ -48,13 +59,22 @@ ensureDateFolder() {
 # Move the files
 for imgfile in *.*
 do
-  date=$(mdls $imgfile | grep kMDItemContentCreationDate | sed 's/^.*=\ \(20..\)-\(..\)-.*/\1 \2/g')
-  year=${date% *}
-  month=${date##* }
-  folder="${year}/${month}"
-  ensureDateFolder "$folder"
-  echo "${imgfile} -> ${folder}"
-  mv -i "$imgfile" "$folder"
+  date=$(exiftool $imgfile | grep -m 1 "Create Date" | grep -v "000" | sed 's/^.*:\ \(20..\):\(..\):.*/\1 \2/g')
+  if [ -z "$date" ]
+  then
+    date=$(exiftool $imgfile | grep -m 1 "File Modification Date" | grep -v "000" | sed 's/^.*:\ \(20..\):\(..\):.*/\1 \2/g')
+  fi
+  if [ -z "$date" ]
+  then
+    echo "Skipping ${imgfile}."
+  else
+    year=${date% *}
+    month=${date##* }
+    folder="${year}/${month}"
+    ensureDateFolder "$folder"
+    echo "${imgfile} -> ${folder}"
+    mv -i "$imgfile" "$folder"
+  fi
 done
 
 popd > /dev/null
