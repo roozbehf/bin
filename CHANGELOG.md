@@ -8,4 +8,7 @@ This change log follow the convention proposed by [Kepp a CHANGELOG](http://keep
 
 ### Added
 
-- The [search](search) script
+- [searchall](searchall) script to recursively search for a text in files
+- [sortMedia](sortMedia) and [sortMediaByName](sortMediaByName) to sort media files on OSX
+- [disableChromeTwoFingerGesture](disableChromeTwoFingerGesture) to disable the two finger gesture of Chrome on OSX
+- [updateRepo](updateRepo) to update (fetch and rebase) git repositories

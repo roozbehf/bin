@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+#
+# A simple script to update git repositories
+#
+# (c) 2016, Roozbeh Farahbod
+#
+
+showUsage() {
+  echo "Usage: updateRepo [repository-dir]"
+  echo "       If [repository-dir] is not provided, all subdirectories will be checked"
+  echo "       and any git directory will be updated."
+}
+
+showError() {
+  echo "Error: $1"
+  echo ""
+  showUsage
+  exit 1
+}
+
+updateRepo() {
+  repo=$1
+
+  if [ -z "$repo" ]
+  then
+    echo "Error: Repository is missing."
+    showUsage
+    exit 1
+  else
+    if ! [ -e "$repo" ]
+    then
+      showError "The repository '$repo' does not exist."
+    fi
+  fi
+
+  cd $repo
+
+  if [ -e ".git" ]
+  then
+    echo "Fetching updates for '$repo'."
+    git fetch
+
+    hasModifications=$(git status -s)
+    if [ -z "${hasModifications}" ]
+    then
+      echo "There is no local update. Rebasing."
+      git rebase
+    else
+      echo "Workspace has uncommited updates. Not rebasing."
+    fi
+  else
+    echo "Skipping non-git directory '$repo'."
+  fi
+
+  cd $OLDPWD
+}
+
+main() {
+  singleRepo=$1
+
+  if [ -z "$singleRepo" ]
+  then
+    for i in $(ls -d */); do updateRepo $i; done
+  else
+    updateRepo ${singleRepo}
+  fi
+}
+
+main $*
