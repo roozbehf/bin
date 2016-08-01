@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+#
+# A change-directory command with name completion.
+# This is the first quick-hack version. Run it with `.`, such as:
+# $ . ccd my proj
+#
+
+if [ -z "$1" ]
+then
+  dir="*"
+else
+  dir=
+  for i in "$@"; do
+      dir="$dir*$i"
+  done
+  dir="$dir*"
+fi
+
+count=$(ls -d ${dir# } | wc -l | sed 's/\ //g')
+
+if [ "${count}" == "1" ]
+then
+  cd ${dir# }
+else
+  echo "Too many options:"
+  echo ${dir# }
+fi
