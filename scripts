@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#
+# A collection of handy bash scripts.
+# Source this file into your bash environment.
+#
+
+#
+# A change-directory command with name completion.
+# This is the first quick-hack version.
+#
+function ccd() {
+  if [ -z "$1" ]
+  then
+    dir="*"
+  else
+    dir=
+    for i in "$@"; do
+        dir="$dir*$i"
+    done
+    dir="$dir*"
+  fi
+
+  count=$(ls -d ${dir# } | wc -l | sed 's/\ //g')
+
+  if [ "${count}" == "1" ]
+  then
+    cd ${dir# }
+  else
+    echo "Too many options:"
+    echo ${dir# }
+  fi
+}
+
+#
+# Change directory to the latest selected finder folder
+#
+function cdf() {
+  cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')"
+}
