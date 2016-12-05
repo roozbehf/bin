@@ -21,7 +21,7 @@ else
 		fi
 	fi
 
- 	find . | while read i
+ 	find . | grep -vE "\.git/" | while read i
 		do
 			grep -qd skip "$KeyWord" "$i"
 			if [ $? == 0 ]
