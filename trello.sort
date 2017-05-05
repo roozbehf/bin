@@ -1,0 +1,9 @@
+#!/bin/bash
+
+BOARD="$1"
+LIST="$2"
+
+URL="${TRELLO_SERVICE_URL}/sort/$BOARD/$LIST"
+
+curl -X POST "$URL"
+
