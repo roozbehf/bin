@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ -z "$1" ]
+then
+  REPO_SED="s/^.*:\(.*\)\.git/https:\/\/gitlab.com\/\1/g"
+else
+  REPO_SED="$1"
+fi
+
+git remote -v | grep fetch | awk '{print $2}' | sed "${REPO_SED}" | xargs open

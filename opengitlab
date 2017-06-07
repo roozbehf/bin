@@ -1,0 +1,3 @@
+#!/bin/bash
+
+opengit "s/^.*:\(.*\)\.git/https:\/\/gitlab.com\/\1/g"
