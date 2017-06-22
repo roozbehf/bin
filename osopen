@@ -1,0 +1,17 @@
+#!/bin/bash
+
+unamestr=$(uname)
+
+case ${unamestr} in
+
+  "Darwin")
+    open $*
+    ;;
+
+  "Linux")
+    xdg-open $* &> /dev/null &
+    ;;
+
+  *)
+    echo "Not sure how to open this. :-("
+esac
