@@ -12,3 +12,4 @@ This change log follow the convention proposed by [Kepp a CHANGELOG](http://keep
 - [sortMedia](sortMedia) and [sortMediaByName](sortMediaByName) to sort media files on OSX
 - [disableChromeTwoFingerGesture](disableChromeTwoFingerGesture) to disable the two finger gesture of Chrome on OSX
 - [updateRepo](updateRepo) to update (fetch and rebase) git repositories
+- [attachHash](attachHash) to add an SHA-1 hashtag to a file

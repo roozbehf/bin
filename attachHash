@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Given a file name, it attaches the first 8 characters of its SHA-1 hash
+# to the file name
+
+FILE="$1"
+FILE_NAME=${FILE%.*}
+FILE_EXT=${FILE##*.}
+
+HASH=$(shasum -a 1 ${FILE} | cut -c 1-8)
+
+if [[ "$FILE" == *"${HASH}"* ]]
+then
+  echo The file already has the hash.
+  exit 0
+fi
+
+NEW_FILE="${FILE_NAME}-${HASH}.${FILE_EXT}"
+
+echo "Renaming '${FILE}' to '${NEW_FILE}'."
+mv ${FILE} ${NEW_FILE}
