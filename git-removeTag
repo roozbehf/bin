@@ -1,0 +1,28 @@
+#!/bin/bash
+#
+# Removes a given git tag
+# Copyright (c) 2018, Roozbeh Farahbod
+#
+
+SCRIPT_NAME=$(basename ${BASH_SOURCE[0]})
+TAG="$1"
+
+exitWithError() {
+  echo "ERROR: $1"
+  exit 1
+}
+
+if [ -z "${TAG}" ]
+then
+  echo "Usage: ${SCRIPT_NAME} <tag>"
+  exitWithError "Tag name is missing."
+fi
+
+git tag --list | grep -q "${TAG}"
+if [ "$?" != "0" ]
+then
+  exitWithError "The given tag does not exist."
+fi
+
+git tag -d "${TAG}" \
+  && git push origin :refs/tags/"${TAG}"
