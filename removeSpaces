@@ -1,0 +1,31 @@
+#!/bin/bash
+#
+# Replaces spaces in a file name to underscores
+# Copyright (c) 2018, Roozbeh Farahbod
+#
+
+SCRIPT_NAME=$(basename ${BASH_SOURCE[0]})
+FULL_FILENAME="$1"
+
+exitWithError() {
+  echo "ERROR: $1"
+  exit 1
+}
+
+if [ -z "${FULL_FILENAME}" ]
+then
+  echo "Usage: ${SCRIPT_NAME} <filename>"
+  exitWithError "File name is missing."
+fi
+
+if [ ! -e "${FULL_FILENAME}" ]
+then
+  exitWithError "File does not exist."
+fi
+
+FILENAME=$( basename "${FULL_FILENAME}" )
+FILEPATH=$( dirname "${FULL_FILENAME}" )
+
+NEW_NAME=$( echo "${FILENAME}" | sed 's/\ /_/g' )
+
+mv -v "$FULL_FILENAME" "$FILEPATH/$NEW_NAME"
