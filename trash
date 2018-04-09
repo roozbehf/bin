@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# A safe replacement for the "rm" command; this moves the files or directories
+# into a trash directory on user's home directory.
+#
+# (c) 2015-2018 Roozbeh Farahbod
+
+if [ -z "${TRASH_DIR}" ]
+then
+    TRASH_DIR=${HOME}/temp/trash
+fi
+
+trashDirInstance=${TRASH_DIR}/`date +%Y-%m-%d-%H%M%S`
+
+echo "moving files to ${trashDirInstance}..."
+
+mkdir -p "${trashDirInstance}"
+
+mv $* "${trashDirInstance}"
+
