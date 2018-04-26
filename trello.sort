@@ -5,5 +5,7 @@ LIST="$2"
 
 URL="${TRELLO_SERVICE_URL}/sort/$BOARD/$LIST"
 
-curl -X POST "$URL"
+curl -X POST "$URL"; echo ""
+
+
 
