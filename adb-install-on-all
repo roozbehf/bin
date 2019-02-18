@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# Installs the given APK on all attached devices 
+#
+# (c) 2019 Roozbeh Farahbod
+
+APK_FILE="$1"
+
+showUsage() {
+    echo "Usage: adb-install-onall <apk-file>"
+    exit 1
+}
+
+if [ -z "$APK_FILE" ]
+then
+    showUsage
+fi
+
+adb devices \
+    | grep -v List \
+    | grep -ve "^$" \
+    | cut -f 1 \
+    | while read dev; do echo -n "Installing on $dev..."; adb -s $dev install "$APK_FILE"; done
