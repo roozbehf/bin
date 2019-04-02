@@ -2,9 +2,19 @@
 
 if [ -z "$1" ]
 then
-  REPO_SED="s/^.*:\(.*\)\.git/https:\/\/gitlab.com\/\1/g"
+  REPO_SED="s/^git@\(.*\):\(.*\)\.git/https:\/\/\1\/\2/g"
 else
   REPO_SED="$1"
 fi
 
-git remote -v | grep fetch | awk '{print $2}' | sed "${REPO_SED}" | xargs osopen
+URL=$(git remote -v | grep fetch | awk '{print $2}' | sed "${REPO_SED}") 
+
+if [[ $URL == "https"* ]]
+then
+  echo $URL
+else
+  echo "Sorry, this script does not support HTTPS repository URLs."
+fi
+
+osopen $URL
+
