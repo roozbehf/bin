@@ -16,8 +16,13 @@ then
     showUsage
 fi
 
+APP_ID=$(adb-appid $APK_FILE)
+
 adb devices \
     | grep -v List \
     | grep -ve "^$" \
     | cut -f 1 \
-    | while read dev; do echo -n "Installing on $dev..."; adb -s $dev install "$APK_FILE"; done
+    | while read dev; do \
+        echo -n "Uninstalling on $dev..."; adb -s $dev uninstall $APP_ID 2> /dev/null; if [ $? -ne 0 ]; then echo "Failed."; fi; \
+        echo -n "Installing on $dev..."; adb -s $dev install "$APK_FILE"; \
+    done
