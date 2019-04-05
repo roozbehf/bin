@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Extracts the app id from an APK file
+#
+# (c) 2019 Roozbeh Farahbod
+
+APK_FILE="$1"
+
+if [ -z "${APK_FILE}" ]
+then
+    echo "Usage: $0 <apk-file-name>"
+    exit 1
+fi
+
+SDK_VERSION=$(ls $ANDROID_HOME/build-tools | tail -n 1)
+AAPT_PATH=${ANDROID_HOME}/build-tools/${SDK_VERSION}/aapt
+
+${AAPT_PATH} dump badging "$APK_FILE" | grep package:\ name | sed s/^package:\ name=\'\\\([a-z0-9\.]*\\\)\'.*$/\\\1/g
+
+
+
+
