@@ -1,0 +1,41 @@
+#!/bin/bash
+#
+# Deletes the current Git workspace and clones it again
+# Copyright (c) 2019, Roozbeh Farahbod
+#
+
+# print an error message to stderr
+printError() {
+  (>&2 echo "ERROR: $*")
+  exit 1
+}
+
+CUR_DIR=$(pwd)
+REPO_DIR=$(git rev-parse --show-toplevel)
+
+if [ -z "${REPO_DIR}" ]
+then
+  printError "The given path is not a git repository."
+fi
+REPO_URL=$(git-repo)
+
+cd "${REPO_DIR}/.."
+
+which trash > /dev/null
+if [ $? -eq 0 ] 
+then
+    trash $REPO_DIR
+else
+    echo "Moving $REPO_DIR to /tmp/..."
+    mv $REPO_DIR /tmp
+fi
+
+git clone $REPO_URL
+
+if [ -d "$CUR_DIR" ]
+then 
+    pushd $CUR_DIR
+else 
+    pushd $REPO_DIR
+fi
+
