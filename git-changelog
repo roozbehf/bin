@@ -1,0 +1,18 @@
+#!/bin/bash
+#
+# Provides a list of commit messages between 
+# Copyright (c) 2019, Roozbeh Farahbod
+#
+
+RANGE="$1"
+
+if [ -z "$RANGE" ]
+then
+    echo "Error: range is not provided."
+    echo "Usage: $0 <range>"
+    exit 1
+fi
+
+git log "$RANGE" | egrep "^(    )|(commit)" | sed 's/^commit.*$/*/'
+
+
