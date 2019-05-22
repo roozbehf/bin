@@ -1,0 +1,41 @@
+#!/bin/zsh
+#
+# Decomposes a given PNG image into its color channels. 
+# 
+# Note: Requires zsh. 
+#
+# Copyright (c) 2019, Roozbeh Farahbod
+#
+
+FILE="$1"
+
+PNG_DIR=decomposed/pngs
+BMP_DIR=decomposed/bmps
+typeset -A colorMap=( 'R' '1 1 1 0 0 0 0 0 0 ' 'G' '0 0 0 1 1 1 0 0 0 ' 'B' '0 0 0 0 0 0 1 1 1 ')
+
+if [ -z "$1" ]
+then 
+    echo "Usage: $0 <png-file>"
+    exit 1
+fi
+
+mkdir -p $BMP_DIR
+mkdir -p $PNG_DIR
+
+echo "Decomposing colors..."
+for c in R G B
+do
+    convert "$FILE" -channel $c -separate temp-1.png
+    convert temp-1.png -define png:color-type=2 temp-2.png
+    convert temp-2.png -color-matrix "${colorMap[$c]}" $PNG_DIR/"${FILE%%.*}-$c.${FILE##*.}"
+    rm -rf temp-?.png
+done
+echo "done."
+
+echo "Converting to BMP..."
+sips -s format bmp $PNG_DIR/* --out $BMP_DIR
+echo "done."
+
+echo ""
+echo "Images are created in the $BMP_DIR directory."
+
