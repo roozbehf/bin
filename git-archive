@@ -1,0 +1,37 @@
+#!/bin/bash
+#
+# Archives a tooz BTO project into a ZIP file
+#
+# Copyright (c) 2019 Roozbeh Farahbod
+
+REPO_DIR=$(git rev-parse --show-toplevel)
+BRANCH=$1
+
+if [ ! -d "${REPO_DIR}/.git" ]
+then
+    echo "Error: The working directory is not a git workspace."
+    echo "Usage: $0 [branch-name]"
+    exit 1
+fi
+
+DIRTY=$(git diff --shortstat)
+if [ ! -z "$DIRTY" ]
+then
+    echo "WARNING: Workspace is not clean. You have untracked or uncommitted files."
+fi
+
+if [ -z "$BRANCH" ]
+then
+    BRANCH=$(git rev-parse --abbrev-ref HEAD)
+fi
+
+BASE_NAME=$(basename "$REPO_DIR")
+TAG=$(git describe --tags)
+FILE_NAME="${BASE_NAME}-${TAG}.zip"
+
+git archive -o "$FILE_NAME" $BRANCH
+
+echo "Archived the '$BRANCH' into $FILE_NAME."
+
+
+

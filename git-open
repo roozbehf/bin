@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# Opens the Web page of the current git workspace. 
+#
+# Copyright (c) 2018-2019, Roozbeh Farahbod
+#
 
 if [ -z "$1" ]
 then
