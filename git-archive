@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Archives a tooz BTO project into a ZIP file
+# Archives a git repository into a ZIP file
 #
 # Copyright (c) 2019 Roozbeh Farahbod
 
