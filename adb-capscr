@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Captures an Android screenshot from a connected device
+#
+# Copyright (c) 2019 Roozbeh Farahbod
+
+SERIAL_NO="$1"
+
+if [ -z "$SERIAL_NO" ]
+then
+    DEV_COUNT=$(adb devices -l | grep product | wc -l)
+    if [ ! $DEV_COUNT -eq 1 ]
+    then
+        (>&2 echo "More than one device is connected. Provide serial number of the device.")
+        (>&2 echo "Usage: $0 [serial-number] > <filename.png>")
+        exit 1
+    fi
+else
+    SERIAL_NO="-s $SERIAL_NO"
+fi
+
+adb $SERIAL_NO exec-out screencap -p 
