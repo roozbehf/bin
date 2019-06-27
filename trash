@@ -16,5 +16,8 @@ echo "moving files to ${trashDirInstance}..."
 
 mkdir -p "${trashDirInstance}"
 
-mv $* "${trashDirInstance}"
+for  f in "$@"
+do
+  mv "$f" "${trashDirInstance}"
+done
 
