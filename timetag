@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Tags the given file with a date and time tag
+#
+# (c) 2019 Roozbeh Farahbod
+
+FILE="$1"
+TIMETAG=`date +'%y%m%d-%H%M'`
+EXECUTABLE=`basename $0`
+
+showError() {
+    >&2 echo $1
+}
+
+if [ -z "$FILE" ]
+then 
+    showError "Usage: $EXECUTABLE <file-name>"
+    exit 1
+fi
+
+if [ -e "$FILE" ] 
+then
+    cp -r "${FILE}" "${FILE%%.*}-${TIMETAG}.${FILE##*.}"
+else
+    showError "File doesn't exists."
+fi
