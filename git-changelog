@@ -5,11 +5,13 @@
 #
 
 RANGE="$1"
+EXECUTABLE=`basename $0`
 
 if [ -z "$RANGE" ]
 then
     echo "Error: range is not provided."
-    echo "Usage: $0 <range>"
+    echo "Usage: $EXECUTABLE <range>"
+    echo "Example: $EXECUTABLE v1.2.0..develop-v1.3"
     exit 1
 fi
 
