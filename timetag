@@ -14,8 +14,8 @@ showError() {
 
 if [ -z "$FILE" ]
 then 
-    showError "Usage: $EXECUTABLE <file-name>"
-    exit 1
+    echo ${TIMETAG}
+    exit 0
 fi
 
 if [ -e "$FILE" ] 
@@ -23,4 +23,5 @@ then
     cp -r "${FILE}" "${FILE%%.*}-${TIMETAG}.${FILE##*.}"
 else
     showError "File doesn't exists."
+    showError "Usage: $EXECUTABLE [file-name]"
 fi
