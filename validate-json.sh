@@ -12,6 +12,7 @@
 # Copyright (c) 2020-2023, Roozbeh Farahbod, roozbeh.ca
 #
 
+# DOCKER_IMAGE=jsonschema-tools:local
 DOCKER_IMAGE=theroozbeh/jsonschema-tools:latest
 SCRIPT_NAME=`basename $0`
 
