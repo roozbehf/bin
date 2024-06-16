@@ -1,0 +1,36 @@
+#! /bin/sh
+
+# Converts a WAV file to MP3 using ffmpeg and lame
+#
+# Copyright (c) 2024, Roozbeh Farahbod
+
+source="$1"
+bitrate="$2"
+stereo="$3"
+
+showUsage() {
+    echo "Usage: $0 <source> [bitrate] [stereo]"
+    echo "  <source> - the source WAV file"
+    echo "  [bitrate] - the bitrate of the MP3 file (default: 256k)"
+    echo "  [stereo] - whether the MP3 file should be stereo; 0: disabled, 1: enabled (default: 1)"
+}
+
+if [ -z "$source" ]; then
+    showUsage
+    exit 1
+fi
+
+if [ -z "$bitrate" ]; then
+    bitrate="256k"
+fi
+
+if [ -z "$stereo" ]; then
+    stereo="1"
+fi
+
+dest="${source%.*}.mp3"
+
+ffmpeg -i "$source" -codec:a libmp3lame -b:a "$bitrate" -ac 2 -joint_stereo "$stereo" "$dest"
+
+# ffmpeg -i 240610\ boogie\ street\ practice\ new\ rythm.wav -codec:a libmp3lame -b:a 256k -ac 2 -joint_stereo 1 output.mp3
+
